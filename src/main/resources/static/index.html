@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TokenGate - Perfect System Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0b1020;
+            color: #f5f5f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 520px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+        }
+
+        .title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #a5b4fc;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+        }
+
+        input {
+            margin-top: 4px;
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.8);
+            color: #f9fafb;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.6);
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: linear-gradient(135deg, #4f46e5, #22c55e);
+            color: #f9fafb;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .result {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .result-granted {
+            background: rgba(22, 163, 74, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: #bbf7d0;
+        }
+
+        .result-denied {
+            background: rgba(220, 38, 38, 0.12);
+            border: 1px solid rgba(248, 113, 113, 0.8);
+            color: #fecaca;
+        }
+
+        .result span.label {
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        .result span.value {
+            font-weight: 600;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        .row div {
+            font-size: 0.8rem;
+        }
+
+        .error-text {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #fecaca;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #6b7280;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="title">TOKENGATE</div>
+    <div class="subtitle">
+        Perfect System Access Gateway – sadece geçerli token'a sahip istekler geçebilir.
+    </div>
+
+    <div class="grid">
+        <div>
+            <label for="tokenInput">Access Token</label>
+            <input id="tokenInput" type="text" placeholder="Örn: PERFECT-TOKEN-DB">
+        </div>
+
+        <div>
+            <label for="urlInput">Hedef URL</label>
+            <input id="urlInput" type="text" placeholder="Örn: https://adult-site.com/video/123">
+        </div>
+    </div>
+
+    <button id="checkButton" onclick="checkAccess()">CHECK ACCESS</button>
+
+    <div id="resultBox" class="result">
+        <div><span class="label">Decision</span></div>
+        <div style="margin-top: 4px;">
+            <span id="decisionValue" class="value"></span>
+        </div>
+
+        <div class="row">
+            <div>
+                <span class="label">Domain</span><br>
+                <span id="domainValue"></span>
+            </div>
+            <div>
+                <span class="label">Reason</span><br>
+                <span id="reasonValue"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="errorText" class="error-text"></div>
+
+    <div class="footer">
+        Demo: TokenGate – Secure Coding & TRON Perfect System konsepti için hazırlanmış örnek arayüz.
+    </div>
+</div>
+
+<script>
+    async function checkAccess() {
+        const button = document.getElementById('checkButton');
+        const tokenInput = document.getElementById('tokenInput');
+        const urlInput = document.getElementById('urlInput');
+        const resultBox = document.getElementById('resultBox');
+        const decisionValue = document.getElementById('decisionValue');
+        const domainValue = document.getElementById('domainValue');
+        const reasonValue = document.getElementById('reasonValue');
+        const errorText = document.getElementById('errorText');
+
+        errorText.textContent = '';
+        resultBox.style.display = 'none';
+        resultBox.classList.remove('result-granted', 'result-denied');
+
+        const token = tokenInput.value.trim();
+        const url = urlInput.value.trim();
+
+        if (!token || !url) {
+            errorText.textContent = 'Token ve URL alanları boş olamaz.';
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+            const response = await fetch('/api/access/check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token, url })
+            });
+
+            const data = await response.json();
+
+            decisionValue.textContent = data.decision || '-';
+            domainValue.textContent = data.domain || '-';
+            reasonValue.textContent = data.reason || '-';
+
+            if (response.ok && data.decision === 'GRANTED') {
+                resultBox.classList.add('result-granted');
+            } else {
+                resultBox.classList.add('result-denied');
+            }
+
+            resultBox.style.display = 'block';
+        } catch (e) {
+            console.error(e);
+            errorText.textContent = 'Sunucuya bağlanırken bir hata oluştu.';
+        } finally {
+            button.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
+>
