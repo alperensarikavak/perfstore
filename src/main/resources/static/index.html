@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>TokenGate - Perfect System Access</title>
@@ -16,10 +17,12 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
+        /* --- Login / Check Card Styles --- */
         .card {
             background: rgba(15, 23, 42, 0.95);
             border-radius: 16px;
@@ -28,6 +31,7 @@
             width: 100%;
             max-width: 520px;
             border: 1px solid rgba(148, 163, 184, 0.4);
+            transition: all 0.3s ease;
         }
 
         .title {
@@ -68,6 +72,7 @@
             color: #f9fafb;
             font-size: 0.9rem;
             outline: none;
+            box-sizing: border-box;
         }
 
         input:focus {
@@ -88,6 +93,11 @@
             letter-spacing: 0.08em;
             background: linear-gradient(135deg, #4f46e5, #22c55e);
             color: #f9fafb;
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         button:disabled {
@@ -115,142 +125,254 @@
             color: #fecaca;
         }
 
-        .result span.label {
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            font-size: 0.7rem;
-            opacity: 0.9;
-        }
-
-        .result span.value {
-            font-weight: 600;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 4px;
-        }
-
-        .row div {
-            font-size: 0.8rem;
-        }
-
         .error-text {
             margin-top: 8px;
             font-size: 0.8rem;
             color: #fecaca;
+            text-align: center;
         }
 
-        .footer {
-            margin-top: 20px;
-            font-size: 0.7rem;
-            color: #6b7280;
+        /* --- Product Page Styles --- */
+        #productPage {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #a5b4fc;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: #4f46e5;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #1e293b;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+
+        .product-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 1.1rem;
+        }
+
+        .btn-buy {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 8px;
             text-align: center;
+            background: #4f46e5;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-buy:hover {
+            background: #4338ca;
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
+
 <body>
-<div class="card">
-    <div class="title">TOKENGATE</div>
-    <div class="subtitle">
-        Perfect System Access Gateway – sadece geçerli token'a sahip istekler geçebilir.
-    </div>
 
-    <div class="grid">
-        <div>
-            <label for="tokenInput">Access Token</label>
-            <input id="tokenInput" type="text" placeholder="Örn: PERFECT-TOKEN-DB">
+    <!-- Login / Check Interface -->
+    <div id="loginCard" class="card">
+        <div class="title">TOKENGATE</div>
+        <div class="subtitle">
+            Sisteme giriş için geçerli bir Access Token giriniz.
         </div>
 
-        <div>
-            <label for="urlInput">Hedef URL</label>
-            <input id="urlInput" type="text" placeholder="Örn: https://adult-site.com/video/123">
-        </div>
-    </div>
-
-    <button id="checkButton" onclick="checkAccess()">CHECK ACCESS</button>
-
-    <div id="resultBox" class="result">
-        <div><span class="label">Decision</span></div>
-        <div style="margin-top: 4px;">
-            <span id="decisionValue" class="value"></span>
-        </div>
-
-        <div class="row">
+        <div class="grid">
             <div>
-                <span class="label">Domain</span><br>
-                <span id="domainValue"></span>
+                <label for="tokenInput">Access Token</label>
+                <input id="tokenInput" type="text" placeholder="Örn: PERFECT-TOKEN-DB" value="PERFECT-TOKEN-DB">
             </div>
-            <div>
-                <span class="label">Reason</span><br>
-                <span id="reasonValue"></span>
+        </div>
+
+        <button id="checkButton" onclick="handleLogin()">GİRİŞ YAP</button>
+
+        <div id="errorText" class="error-text"></div>
+    </div>
+
+    <!-- Product Showcase Interface -->
+    <div id="productPage">
+        <div class="header">
+            <h1>PerfStore Ürünleri</h1>
+            <button onclick="logout()"
+                style="width: auto; padding: 8px 16px; margin: 0; background: #ef4444;">Çıkış</button>
+        </div>
+
+        <div id="productsContainer" class="product-grid">
+            <!-- Products will be injected here -->
+            <div style="color: #94a3b8; grid-column: 1/-1; text-align: center; padding: 40px;">
+                Yükleniyor...
             </div>
         </div>
     </div>
 
-    <div id="errorText" class="error-text"></div>
+    <script>
+        // Basit bir state yönetimi için
+        const API_BASE = '/api';
 
-    <div class="footer">
-        Demo: TokenGate – Secure Coding & TRON Perfect System konsepti için hazırlanmış örnek arayüz.
-    </div>
-</div>
+        async function handleLogin() {
+            const tokenInput = document.getElementById('tokenInput');
+            const errorText = document.getElementById('errorText');
+            const button = document.getElementById('checkButton');
 
-<script>
-    async function checkAccess() {
-        const button = document.getElementById('checkButton');
-        const tokenInput = document.getElementById('tokenInput');
-        const urlInput = document.getElementById('urlInput');
-        const resultBox = document.getElementById('resultBox');
-        const decisionValue = document.getElementById('decisionValue');
-        const domainValue = document.getElementById('domainValue');
-        const reasonValue = document.getElementById('reasonValue');
-        const errorText = document.getElementById('errorText');
+            const token = tokenInput.value.trim();
 
-        errorText.textContent = '';
-        resultBox.style.display = 'none';
-        resultBox.classList.remove('result-granted', 'result-denied');
-
-        const token = tokenInput.value.trim();
-        const url = urlInput.value.trim();
-
-        if (!token || !url) {
-            errorText.textContent = 'Token ve URL alanları boş olamaz.';
-            return;
-        }
-
-        button.disabled = true;
-
-        try {
-            const response = await fetch('/api/access/check', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ token, url })
-            });
-
-            const data = await response.json();
-
-            decisionValue.textContent = data.decision || '-';
-            domainValue.textContent = data.domain || '-';
-            reasonValue.textContent = data.reason || '-';
-
-            if (response.ok && data.decision === 'GRANTED') {
-                resultBox.classList.add('result-granted');
-            } else {
-                resultBox.classList.add('result-denied');
+            if (!token) {
+                errorText.textContent = 'Lütfen bir token giriniz.';
+                return;
             }
 
-            resultBox.style.display = 'block';
-        } catch (e) {
-            console.error(e);
-            errorText.textContent = 'Sunucuya bağlanırken bir hata oluştu.';
-        } finally {
-            button.disabled = false;
+            button.disabled = true;
+            button.textContent = "DOĞRULANIYOR...";
+            errorText.textContent = '';
+
+            try {
+                // 1. Önce Token'ı sunucudan doğrula (Gerçek Access Gate Modu)
+                const checkRes = await fetch('/api/access/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, url: 'perfstore-login' }) // Dummy domain
+                });
+
+                if (!checkRes.ok) {
+                    throw new Error('Sunucu hatası');
+                }
+
+                const checkData = await checkRes.json();
+
+                if (checkData.decision !== 'GRANTED') {
+                    errorText.innerHTML = `Erişim Reddedildi! <br> Sebep: ${checkData.reason || 'Bilinmiyor'}`;
+                    button.disabled = false;
+                    button.textContent = "GİRİŞ YAP";
+                    return;
+                }
+
+                // 2. Doğrulama başarılı ise ürünleri getir
+                button.textContent = "ÜRÜNLER YÜKLENİYOR...";
+                await fetchProducts();
+
+                // Başarılı ise ekran değiştir
+                document.getElementById('loginCard').classList.add('hidden');
+                document.getElementById('productPage').style.display = 'block';
+
+            } catch (e) {
+                console.error(e);
+                errorText.textContent = 'Giriş işlemi başarısız. Sunucuya ulaşılamadı.';
+            } finally {
+                if (button.textContent !== "ÜRÜNLER YÜKLENİYOR...") {
+                    button.disabled = false;
+                    button.textContent = "GİRİŞ YAP";
+                }
+            }
         }
-    }
-</script>
+
+        async function fetchProducts() {
+            const container = document.getElementById('productsContainer');
+            try {
+                const res = await fetch(API_BASE + '/products');
+                if (!res.ok) throw new Error('Ürünler alınamadı');
+
+                const products = await res.json();
+
+                if (products.length === 0) {
+                    container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#94a3b8">Hemen ürün bulunamadı.</div>';
+                    return;
+                }
+
+                container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-desc">${product.description}</div>
+                        <div class="product-price">${formatCurrency(product.price)} TL</div>
+                        <button class="btn-buy" onclick="alert('Satın alma özelliği yakında!')">SATIN AL</button>
+                    </div>
+                </div>
+            `).join('');
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<div style="color: #ef4444; grid-column: 1/-1; text-align: center;">Ürünler yüklenirken hata oluştu.</div>';
+            }
+        }
+
+        function logout() {
+            document.getElementById('productPage').style.display = 'none';
+            document.getElementById('loginCard').classList.remove('hidden');
+            document.getElementById('tokenInput').value = '';
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2 }).format(value);
+        }
+    </script>
+
 </body>
+
 </html>
+
 >
