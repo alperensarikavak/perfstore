@@ -23,6 +23,7 @@ public class SecurityConfig {
                                                 // API endpoint
                                                 .requestMatchers("/api/access/check").permitAll()
                                                 .requestMatchers("/api/products").permitAll()
+                                                .requestMatchers("/api/auth/**").permitAll()
                                                 // H2 console (dev için)
                                                 .requestMatchers("/h2-console/**").permitAll()
                                                 // Diğer her şey yasak
