@@ -1,0 +1,13 @@
+package com.group20.perfstore;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class PerfstoreApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}

@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlan Ekle - Perfstore</title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+</head>
+<body>
+	
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="create-box">
+				<h2>Yeni İlan</h2>
+
+				<form method="post" enctype="multipart/form-data" th:object="${ilanDto}">
+
+					<div class="row">
+						<label>İlan Adı</label>
+						<div>
+							<input class="form-control" th:field="${ilanDto.ilan_adi}">
+							<p th:if="${#fields.hasErrors('ilan_adi')}" th:errorclass="text-danger"
+							th:errors="${ilanDto.ilan_adi}"></p>
+						</div>
+					</div>
+
+					<div class="row">
+						<label>Fiyat</label>
+						<div>
+							<input class="form-control" type="number" step="0.01" min="0" th:field="${ilanDto.ilan_fiyati}">
+							<p th:if="${#fields.hasErrors('ilan_fiyati')}" th:errorclass="text-danger"
+							th:errors="${ilanDto.ilan_fiyati}"></p>
+						</div>
+					</div>
+
+					<div class="row">
+						<label>Açıklama</label>
+						<div>
+							<textarea class="form-control" th:field="${ilanDto.aciklama}"></textarea>
+							<p th:if="${#fields.hasErrors('aciklama')}" th:errorclass="text-danger"
+							th:errors="${ilanDto.aciklama}"></p>
+						</div>
+					</div>	
+
+					<div class="row">
+						<label>Görsel</label>
+						<div>
+							<input class="form-control" type="file" th:field="${ilanDto.imageFile}">
+							<p th:if="${#fields.hasErrors('imageFile')}" th:errorclass="text-danger"
+							th:errors="${ilanDto.imageFile}"></p>
+						</div>
+					</div>
+
+					<button type="submit" class="submit-btn">Kaydet</button>
+					<a href="/ilanlar" class="cancel-btn">İptal</a>
+
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+<style>
+	body {
+	    background: #1f2235;
+	    color: #fff;
+	    font-family: Arial, sans-serif;
+	    padding-top: 40px;
+	}
+
+	.create-box {
+	    background: #2c2f48;
+	    padding: 30px;
+	    border-radius: 18px;
+	    margin: 0 auto;
+	    width: 500px;
+	    box-shadow: 0 0 25px rgba(0,0,0,0.3);
+	}
+
+	.create-box h2 {
+	    text-align: center;
+	    margin-bottom: 25px;
+	    font-weight: bold;
+	    color: #d6d6ff;
+	}
+
+	label {
+	    margin-bottom: 5px;
+	    font-weight: 600;
+	    color: #b7b8ff;
+	}
+
+	.form-control {
+	    background: #1c1e2d;
+	    border: 1px solid #4e52ff;
+	    color: white;
+	    border-radius: 10px;
+	}
+
+	.form-control:focus {
+	    background: #1c1e2d;
+	    border: 1px solid #6a6cff;
+	    color: white;
+	    box-shadow: 0 0 10px rgba(78,82,255,0.4);
+	}
+
+	.row {
+	    margin-bottom: 20px;
+	}
+
+	.submit-btn {
+	    width: 100%;
+	    background: linear-gradient(90deg, #5a5dff, #7c59ff);
+	    padding: 12px;
+	    color: white;
+	    border: none;
+	    border-radius: 12px;
+	    font-size: 16px;
+	    margin-top: 15px;
+	    font-weight: bold;
+	}
+
+	.submit-btn:hover {
+	    opacity: 0.9;
+	    cursor: pointer;
+	}
+
+	.cancel-btn {
+	    display: inline-block;
+	    margin-top: 10px;
+	    color: #c4c6ff;
+	    text-decoration: none;
+	    font-weight: 600;
+	}
+
+	.cancel-btn:hover {
+	    color: #ffffff;
+	    text-decoration: underline;
+	}
+</style>
