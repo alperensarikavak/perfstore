@@ -1,10 +1,10 @@
-package com.example.tokengate;
+package com.perfstore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TokengateApplicationTests {
+class PerfstoreApplicationTests {
 
 	@Test
 	void contextLoads() {

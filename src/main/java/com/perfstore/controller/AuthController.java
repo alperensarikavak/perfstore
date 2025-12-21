@@ -18,9 +18,12 @@ import java.util.UUID;
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository,
+            org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -30,8 +33,8 @@ public class AuthController {
                     .body(new AuthDto.AuthResponse(null, null, "Username already exists"));
         }
 
-        // Create new User
-        User user = new User(request.getUsername(), request.getPassword(), request.getEmail());
+        // Create new User with encoded password
+        User user = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail());
 
         // Create a unique AccessToken for this user
         AccessToken token = new AccessToken();
@@ -53,8 +56,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthDto.AuthResponse> login(@RequestBody AuthDto.LoginRequest request) {
         return userRepository.findByUsername(request.getUsername())
-                .filter(u -> u.getPassword().equals(request.getPassword())) // Simple text password check (In prod use
-                                                                            // hashing!)
+                .filter(u -> passwordEncoder.matches(request.getPassword(), u.getPassword()))
                 .map(u -> ResponseEntity.ok(
                         new AuthDto.AuthResponse(
                                 u.getAccessToken().getTokenValue(),
