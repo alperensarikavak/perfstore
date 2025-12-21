@@ -1,4 +1,4 @@
-package com.example.tokengate.dto;
+package com.perfstore.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

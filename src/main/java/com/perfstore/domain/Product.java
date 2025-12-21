@@ -1,4 +1,4 @@
-package com.example.tokengate.domain;
+package com.perfstore.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

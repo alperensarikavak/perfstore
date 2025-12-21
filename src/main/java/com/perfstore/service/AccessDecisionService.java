@@ -1,11 +1,11 @@
-package com.example.tokengate.service;
+package com.perfstore.service;
 
-import com.example.tokengate.domain.AccessLog;
-import com.example.tokengate.domain.AccessToken;
-import com.example.tokengate.domain.SitePolicy;
-import com.example.tokengate.repository.AccessLogRepository;
-import com.example.tokengate.repository.AccessTokenRepository;
-import com.example.tokengate.repository.SitePolicyRepository;
+import com.perfstore.domain.AccessLog;
+import com.perfstore.domain.AccessToken;
+import com.perfstore.domain.SitePolicy;
+import com.perfstore.repository.AccessLogRepository;
+import com.perfstore.repository.AccessTokenRepository;
+import com.perfstore.repository.SitePolicyRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

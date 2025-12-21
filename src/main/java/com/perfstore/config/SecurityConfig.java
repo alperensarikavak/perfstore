@@ -1,4 +1,4 @@
-package com.example.tokengate.config;
+package com.perfstore.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

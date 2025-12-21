@@ -1,26 +1,26 @@
-package com.example.tokengate;
+package com.perfstore;
 
-import com.example.tokengate.domain.AccessToken;
-import com.example.tokengate.repository.AccessTokenRepository;
+import com.perfstore.domain.AccessToken;
+import com.perfstore.repository.AccessTokenRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.example.tokengate.domain.SitePolicy;
-import com.example.tokengate.repository.SitePolicyRepository;
+import com.perfstore.domain.SitePolicy;
+import com.perfstore.repository.SitePolicyRepository;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
-public class TokengateApplication {
+public class PerfstoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TokengateApplication.class, args);
+		SpringApplication.run(PerfstoreApplication.class, args);
 	}
 
 	@Bean
 	public CommandLineRunner dataInitializer(AccessTokenRepository accessTokenRepository,
 			SitePolicyRepository sitePolicyRepository,
-			com.example.tokengate.repository.ProductRepository productRepository) {
+			com.perfstore.repository.ProductRepository productRepository) {
 		return args -> {
 			// --- Demo AccessToken ---
 			String demoTokenValue = "PERFECT-TOKEN-DB";
@@ -58,17 +58,17 @@ public class TokengateApplication {
 
 			// --- Demo Products ---
 			if (productRepository.count() == 0) {
-				productRepository.save(new com.example.tokengate.domain.Product(
+				productRepository.save(new com.perfstore.domain.Product(
 						"High Performance Laptop",
 						"The ultimate machine for professionals.",
 						new java.math.BigDecimal("25000.00"),
 						"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=60"));
-				productRepository.save(new com.example.tokengate.domain.Product(
+				productRepository.save(new com.perfstore.domain.Product(
 						"Wireless Gaming Mouse",
 						"Precision and speed for gamers.",
 						new java.math.BigDecimal("800.00"),
 						"https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=500&q=60"));
-				productRepository.save(new com.example.tokengate.domain.Product(
+				productRepository.save(new com.perfstore.domain.Product(
 						"Mechanical Keyboard",
 						"Tactile feedback for the best typing experience.",
 						new java.math.BigDecimal("1500.00"),

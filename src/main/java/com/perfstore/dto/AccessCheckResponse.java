@@ -1,4 +1,4 @@
-package com.example.tokengate.dto;
+package com.perfstore.dto;
 
 public class AccessCheckResponse {
 

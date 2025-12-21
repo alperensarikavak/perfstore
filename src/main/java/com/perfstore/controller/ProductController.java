@@ -1,7 +1,7 @@
-package com.example.tokengate.controller;
+package com.perfstore.controller;
 
-import com.example.tokengate.domain.Product;
-import com.example.tokengate.repository.ProductRepository;
+import com.perfstore.domain.Product;
+import com.perfstore.repository.ProductRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

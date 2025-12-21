@@ -1,9 +1,9 @@
-package com.example.tokengate.controller;
+package com.perfstore.controller;
 
-import com.example.tokengate.domain.AccessToken;
-import com.example.tokengate.domain.User;
-import com.example.tokengate.dto.AuthDto;
-import com.example.tokengate.repository.UserRepository;
+import com.perfstore.domain.AccessToken;
+import com.perfstore.domain.User;
+import com.perfstore.dto.AuthDto;
+import com.perfstore.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

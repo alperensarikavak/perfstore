@@ -1,6 +1,6 @@
-package com.example.tokengate.repository;
+package com.perfstore.repository;
 
-import com.example.tokengate.domain.User;
+import com.perfstore.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

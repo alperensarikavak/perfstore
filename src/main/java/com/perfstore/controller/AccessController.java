@@ -1,9 +1,9 @@
-package com.example.tokengate.controller;
+package com.perfstore.controller;
 
-import com.example.tokengate.dto.AccessCheckRequest;
-import com.example.tokengate.dto.AccessCheckResponse;
-import com.example.tokengate.service.AccessDecisionService;
-import com.example.tokengate.service.AccessDecisionService.DecisionResult;
+import com.perfstore.dto.AccessCheckRequest;
+import com.perfstore.dto.AccessCheckResponse;
+import com.perfstore.service.AccessDecisionService;
+import com.perfstore.service.AccessDecisionService.DecisionResult;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
