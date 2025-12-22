@@ -1,30 +1,47 @@
 package com.perfstore.controller;
 
-import com.perfstore.domain.Product;
-import com.perfstore.repository.ProductRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import com.perfstore.dto.ProductDto;
+import com.perfstore.service.ProductService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
-    public List<Product> getAllProducts(@RequestParam(required = false) String query) {
-        if (query != null && !query.isBlank()) {
-            return productRepository.findByNameContainingIgnoreCase(query);
-        }
-        return productRepository.findAll();
+    public ResponseEntity<List<ProductDto.Response>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto.Response> getProduct(@PathVariable UUID id) {
+        return ResponseEntity.ok(productService.getProduct(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductDto.Response> createProduct(@RequestBody ProductDto.CreateRequest request) {
+        return ResponseEntity.ok(productService.createProduct(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto.Response> updateProduct(@PathVariable UUID id,
+            @RequestBody ProductDto.UpdateRequest request) {
+        return ResponseEntity.ok(productService.updateProduct(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }
