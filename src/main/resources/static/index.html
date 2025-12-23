@@ -119,6 +119,13 @@
             color: #bbf7d0;
         }
 
+        .result-warning {
+            background: rgba(234, 179, 8, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.6);
+            color: #fde68a;
+        }
+
+
         .result-denied {
             background: rgba(220, 38, 38, 0.12);
             border: 1px solid rgba(248, 113, 113, 0.8);
@@ -300,6 +307,7 @@
             <div class="tab active" onclick="switchTab('login')">GİRİŞ YAP</div>
             <div class="tab" onclick="switchTab('register')">KAYIT OL</div>
         </div>
+        <div id="trustBadge" class="result" style="display:none; margin-bottom:16px;"></div>
 
         <!-- Login Form -->
         <div id="loginForm" class="auth-form">
@@ -366,6 +374,8 @@
     <script>
         const API_BASE = '/api';
         let currentUserToken = null;
+        let currentUserTrustLevel = "UNKNOWN";
+
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -410,8 +420,14 @@
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || 'Giriş başarısız');
 
-                // Başarılı
-                loginSuccess(data);
+                // ✅ Restricted ise hemen hata ver (ürün sayfasına geçme)
+if ((data.trustLevel || "UNKNOWN") === "RESTRICTED") {
+    throw new Error("⚠️ Restricted User: Puanınız 50'nin altına düştü. Erişiminiz kısıtlandı.");
+}
+
+// Başarılı
+loginSuccess(data);
+
 
             } catch (e) {
                 errorText.textContent = e.message;
@@ -456,17 +472,23 @@
             }
         }
 
-        function loginSuccess(data) {
-            currentUserToken = data.token;
-            document.getElementById('welcomeUser').textContent = data.username;
+       function loginSuccess(data) {
+    currentUserToken = data.token;
+    currentUserTrustLevel = data.trustLevel || "UNKNOWN";
 
-            // Ekran değiştir
-            document.getElementById('authCard').classList.add('hidden');
-            document.getElementById('productPage').style.display = 'block';
+    document.getElementById('welcomeUser').textContent = data.username;
 
-            // Ürünleri çek
-            fetchProducts();
-        }
+    // Ekran değiştir
+    document.getElementById('authCard').classList.add('hidden');
+    document.getElementById('productPage').style.display = 'block';
+
+    // ✅ Trust badge göster
+    showTrustBadge(currentUserTrustLevel);
+
+    // Ürünleri çek
+    fetchProducts();
+}
+
 
         let searchTimeout;
         function handleSearch(query) {
@@ -534,6 +556,29 @@
         function formatCurrency(value) {
             return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2 }).format(value);
         }
+
+        function showTrustBadge(level) {
+    const badge = document.getElementById("trustBadge");
+    if (!badge) return;
+
+    badge.style.display = "block";
+    badge.className = "result"; // reset
+
+    if (level === "RESTRICTED") {
+        badge.classList.add("result-denied");
+        badge.textContent = "⚠️ Restricted User: Hesabınız sınırlı erişimdedir.";
+    } else if (level === "TRUSTED") {
+        badge.classList.add("result-granted");
+        badge.textContent = "✅ Trusted User: Tam erişim aktif.";
+    } else if (level === "NORMAL") {
+        badge.classList.add("result-warning");
+        badge.textContent = "ℹ️ Normal User: Standart erişim.";
+    } else {
+        badge.classList.add("result-warning");
+        badge.textContent = "ℹ️ Trust bilgisi alınamadı.";
+    }
+}
+
     </script>
 
 </body>

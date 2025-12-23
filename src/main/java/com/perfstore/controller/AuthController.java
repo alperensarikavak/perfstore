@@ -4,11 +4,10 @@ import com.perfstore.domain.AccessToken;
 import com.perfstore.domain.User;
 import com.perfstore.dto.AuthDto;
 import com.perfstore.repository.UserRepository;
+import com.perfstore.trust.TrustLevel;
+import com.perfstore.service.TrustScoreService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,11 +18,14 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final TrustScoreService trustScoreService; // ✅ EKLE
 
     public AuthController(UserRepository userRepository,
-            org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
+                          org.springframework.security.crypto.password.PasswordEncoder passwordEncoder,
+                          TrustScoreService trustScoreService) { // ✅ EKLE
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.trustScoreService = trustScoreService; // ✅ EKLE
     }
 
     @PostMapping("/register")
@@ -33,21 +35,20 @@ public class AuthController {
                     .body(new AuthDto.AuthResponse(null, null, "Username already exists"));
         }
 
-        // Create new User with encoded password
         User user = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail());
 
-        // Create a unique AccessToken for this user
         AccessToken token = new AccessToken();
-        token.setTokenValue(UUID.randomUUID().toString().toUpperCase()); // Random Token
+        token.setTokenValue(UUID.randomUUID().toString().toUpperCase());
         token.setOwnerName(user.getUsername());
-        token.setAllowedCategory("GENERAL"); // Default category
-        token.setExpiresAt(LocalDateTime.now().plusDays(30)); // 30 days valid
-        token.setMaxUsageCount(1000); // Generous limit
+        token.setAllowedCategory("GENERAL");
+        token.setExpiresAt(LocalDateTime.now().plusDays(30));
+        token.setMaxUsageCount(1000);
         token.setUsedCount(0);
 
         user.setAccessToken(token);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user); // ✅ burada savedUser al
+        trustScoreService.createProfileIfMissing(savedUser.getId()); // ✅ TAM BURAYA
 
         return ResponseEntity.ok(
                 new AuthDto.AuthResponse(token.getTokenValue(), user.getUsername(), "Registration successful"));
@@ -55,14 +56,38 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthDto.AuthResponse> login(@RequestBody AuthDto.LoginRequest request) {
+
         return userRepository.findByUsername(request.getUsername())
-                .filter(u -> passwordEncoder.matches(request.getPassword(), u.getPassword()))
-                .map(u -> ResponseEntity.ok(
-                        new AuthDto.AuthResponse(
-                                u.getAccessToken().getTokenValue(),
-                                u.getUsername(),
-                                "Login successful")))
+                .map(u -> {
+
+                    // 🔹 Trust profili yoksa oluştur
+                    trustScoreService.createProfileIfMissing(u.getId());
+
+                    // 🔹 Şifre doğruysa
+                    if (passwordEncoder.matches(request.getPassword(), u.getPassword())) {
+
+                        // ✅ BURASI
+                        TrustLevel level = trustScoreService.onLoginSuccess(u.getId());
+
+                        return ResponseEntity.ok(
+                                new AuthDto.AuthResponse(
+                                        u.getAccessToken().getTokenValue(),
+                                        u.getUsername(),
+                                        "Login successful",
+                                        level.name()   // UI bunu okuyacak
+                                )
+                        );
+                    }
+
+                    // ❌ Şifre yanlışsa
+                    trustScoreService.onLoginFail(u.getId());
+                    return ResponseEntity.status(401)
+                            .body(new AuthDto.AuthResponse(null, null, "Invalid credentials"));
+                })
                 .orElse(ResponseEntity.status(401)
                         .body(new AuthDto.AuthResponse(null, null, "Invalid credentials")));
     }
+
+
+
 }
