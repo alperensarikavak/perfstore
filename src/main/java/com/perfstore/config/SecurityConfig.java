@@ -11,6 +11,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+        private final TokenAuthenticationFilter tokenAuthenticationFilter;
+
+        public SecurityConfig(TokenAuthenticationFilter tokenAuthenticationFilter) {
+                this.tokenAuthenticationFilter = tokenAuthenticationFilter;
+        }
+
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
@@ -23,11 +29,14 @@ public class SecurityConfig {
                                                 // API endpoint
                                                 .requestMatchers("/api/access/check").permitAll()
                                                 .requestMatchers("/api/products").permitAll()
+                                                .requestMatchers("/api/categories").permitAll() // Added
                                                 .requestMatchers("/api/auth/**").permitAll()
                                                 // H2 console (dev için)
                                                 .requestMatchers("/h2-console/**").permitAll()
-                                                // Diğer her şey yasak
-                                                .anyRequest().denyAll())
+                                                // Diğer her şey kimlik doğrulama gerektirir
+                                                .anyRequest().authenticated())
+                                .addFilterBefore(tokenAuthenticationFilter,
+                                                org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                                 .formLogin(form -> form.disable())
                                 .httpBasic(basic -> basic.disable());
