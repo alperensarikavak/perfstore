@@ -41,6 +41,7 @@ export default function ProductGrid({ initialProducts, categories }) {
                     {user ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                             <span style={{ color: 'var(--text-muted)' }}>{user.username}</span>
+                            <Link href="/admin/add-product" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem', border: '1px solid var(--accent)', padding: '6px 12px', borderRadius: '8px' }}>+ Ürün Ekle</Link>
                             <button
                                 onClick={logout}
                                 style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.4)', padding: '8px 16px', borderRadius: '99px', cursor: 'pointer', fontWeight: 600 }}>
