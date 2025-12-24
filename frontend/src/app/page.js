@@ -1,5 +1,7 @@
 import ProductGrid from '@/components/ProductGrid';
 
+export const dynamic = 'force-dynamic';
+
 async function getProducts() {
   try {
     const res = await fetch('http://localhost:8080/api/products', { cache: 'no-store' });

@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
 
 export default function ProductGrid({ initialProducts, categories }) {
     const { user, logout } = useAuth();
+    const { addToCart, setIsCartOpen, cartCount } = useCart();
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredProducts = initialProducts.filter(p =>
@@ -37,11 +39,30 @@ export default function ProductGrid({ initialProducts, categories }) {
                     />
                 </div>
 
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    {/* Cart Icon */}
+                    <button
+                        onClick={() => setIsCartOpen(true)}
+                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', position: 'relative', fontSize: '1.5rem' }}>
+                        🛒
+                        {cartCount > 0 && (
+                            <span style={{
+                                position: 'absolute', top: '-5px', right: '-8px',
+                                background: 'var(--accent)', color: 'black',
+                                fontSize: '0.75rem', fontWeight: 'bold',
+                                width: '20px', height: '20px', borderRadius: '50%',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            }}>
+                                {cartCount}
+                            </span>
+                        )}
+                    </button>
+
                     {user ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                             <span style={{ color: 'var(--text-muted)' }}>{user.username}</span>
                             <Link href="/admin/add-product" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem', border: '1px solid var(--accent)', padding: '6px 12px', borderRadius: '8px' }}>+ Ürün Ekle</Link>
+                            <Link href="/orders" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Siparişlerim</Link>
                             <button
                                 onClick={logout}
                                 style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.4)', padding: '8px 16px', borderRadius: '99px', cursor: 'pointer', fontWeight: 600 }}>
@@ -80,19 +101,14 @@ export default function ProductGrid({ initialProducts, categories }) {
                                 <button
                                     className="btn-primary"
                                     style={{ padding: '10px 24px', fontSize: '0.9rem' }}
-                                    onClick={() => alert(`"${product.name}" satın alındı!`)}
+                                    onClick={() => addToCart(product)}
                                 >
-                                    SATIN AL
+                                    SEPETE EKLE
                                 </button>
                             </div>
                         </div>
                     </div>
                 ))}
-                {filteredProducts.length === 0 && (
-                    <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>
-                        Aradığınız kriterlere uygun ürün bulunamadı.
-                    </div>
-                )}
             </div>
         </div>
     );
