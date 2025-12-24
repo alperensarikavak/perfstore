@@ -21,6 +21,7 @@ public class AuthDto {
         private String username;
         private String password;
         private String email;
+        private String pin;
     }
 
     @Data
@@ -30,5 +31,30 @@ public class AuthDto {
         private String token;
         private String username;
         private String message;
+        private String trustLevel;
+        private String status;      // OK | REQUIRES_PIN
+        private String challengeId; // PIN için null
+
+        // ✅ eski kodlar kırılmasın
+        public AuthResponse(String token, String username, String message) {
+            this.token = token;
+            this.username = username;
+            this.message = message;
+        }
+
+        public AuthResponse(String token, String username, String message, String trustLevel) {
+            this.token = token;
+            this.username = username;
+            this.message = message;
+            this.trustLevel = trustLevel;
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VerifyPinRequest {
+        private String username;
+        private String pin;
     }
 }
