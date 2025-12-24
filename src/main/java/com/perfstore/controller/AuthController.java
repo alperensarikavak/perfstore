@@ -37,6 +37,14 @@ public class AuthController {
 
         User user = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail());
 
+        if (request.getPin() == null || request.getPin().length() < 4) {
+            return ResponseEntity.badRequest()
+                    .body(new AuthDto.AuthResponse(null, null, "PIN must be at least 4 digits"));
+        }
+
+// PIN hash kaydet
+        user.setPinHash(passwordEncoder.encode(request.getPin()));
+
         AccessToken token = new AccessToken();
         token.setTokenValue(UUID.randomUUID().toString().toUpperCase());
         token.setOwnerName(user.getUsername());
@@ -60,26 +68,42 @@ public class AuthController {
         return userRepository.findByUsername(request.getUsername())
                 .map(u -> {
 
-                    // 🔹 Trust profili yoksa oluştur
                     trustScoreService.createProfileIfMissing(u.getId());
 
-                    // 🔹 Şifre doğruysa
+                    // 1️⃣ Şifre kontrolü
                     if (passwordEncoder.matches(request.getPassword(), u.getPassword())) {
 
-                        // ✅ BURASI
+                        // 2️⃣ Trust score hesapla
                         TrustLevel level = trustScoreService.onLoginSuccess(u.getId());
 
+                        // 3️⃣ 🔐 RESTRICTED ise → TOKEN DÖNME
+                        if (level == TrustLevel.RESTRICTED) {
+                            return ResponseEntity.ok(
+                                    new AuthDto.AuthResponse(
+                                            null,                     // ❌ token yok
+                                            u.getUsername(),
+                                            "Restricted user. Please enter your PIN.",
+                                            level.name(),
+                                            "REQUIRES_PIN",           // 🔴 ÖNEMLİ
+                                            null
+                                    )
+                            );
+                        }
+
+                        // 4️⃣ ✅ NORMAL kullanıcı → TOKEN DÖN
                         return ResponseEntity.ok(
                                 new AuthDto.AuthResponse(
                                         u.getAccessToken().getTokenValue(),
                                         u.getUsername(),
                                         "Login successful",
-                                        level.name()   // UI bunu okuyacak
+                                        level.name(),
+                                        "OK",
+                                        null
                                 )
                         );
                     }
 
-                    // ❌ Şifre yanlışsa
+                    // 5️⃣ ❌ Şifre yanlışsa
                     trustScoreService.onLoginFail(u.getId());
                     return ResponseEntity.status(401)
                             .body(new AuthDto.AuthResponse(null, null, "Invalid credentials"));
@@ -88,6 +112,38 @@ public class AuthController {
                         .body(new AuthDto.AuthResponse(null, null, "Invalid credentials")));
     }
 
+    @PostMapping("/verify-pin")
+    public ResponseEntity<AuthDto.AuthResponse> verifyPin(@RequestBody AuthDto.VerifyPinRequest request) {
+
+        return userRepository.findByUsername(request.getUsername())
+                .map(u -> {
+
+                    if (u.getPinHash() == null) {
+                        return ResponseEntity.status(400)
+                                .body(new AuthDto.AuthResponse(null, null, "PIN not set"));
+                    }
+
+                    if (!passwordEncoder.matches(request.getPin(), u.getPinHash())) {
+                        trustScoreService.onLoginFail(u.getId()); // istersen puanı düşür
+                        return ResponseEntity.status(401)
+                                .body(new AuthDto.AuthResponse(null, null, "Invalid PIN"));
+                    }
+
+                    // ✅ PIN doğru → token ver
+                    return ResponseEntity.ok(
+                            new AuthDto.AuthResponse(
+                                    u.getAccessToken().getTokenValue(),
+                                    u.getUsername(),
+                                    "PIN verified. Login successful.",
+                                    TrustLevel.NORMAL.name(), // istersen level'ı tekrar hesaplatırız
+                                    "OK",
+                                    null
+                            )
+                    );
+                })
+                .orElse(ResponseEntity.status(401)
+                        .body(new AuthDto.AuthResponse(null, null, "Invalid credentials")));
+    }
 
 
 }

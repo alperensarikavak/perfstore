@@ -16,6 +16,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "pin_hash")
+    private String pinHash;
+
+
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -33,4 +37,7 @@ public class User {
         this.password = password;
         this.email = email;
     }
+    public String getPinHash() { return pinHash; }
+    public void setPinHash(String pinHash) { this.pinHash = pinHash; }
+
 }
