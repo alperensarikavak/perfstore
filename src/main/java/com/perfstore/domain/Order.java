@@ -27,6 +27,30 @@ public class Order {
 
     private String customerNotes;
 
+    @Column(nullable = false)
+    private String shippingAddress = "N/A"; // Default for existing records
+
+    @Column(nullable = false)
+    private String paymentMethod = "UNKNOWN";
+
+    // getters and setters
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 

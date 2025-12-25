@@ -21,7 +21,7 @@ export default function CartSidebar() {
 
     if (!isCartOpen) return null;
 
-    const handleCheckout = async () => {
+    const handleCheckout = () => {
         if (!user) {
             alert("Lütfen önce giriş yapın!");
             router.push('/login');
@@ -29,57 +29,8 @@ export default function CartSidebar() {
             return;
         }
 
-        setIsCheckingOut(true);
-        try {
-            // Prepare payload
-            const payload = {
-                items: cart.map(item => ({
-                    productId: item.product.id,
-                    quantity: item.quantity
-                }))
-            };
-
-            const authToken = localStorage.getItem('token'); // Fallback manual token get
-
-            const res = await fetch('/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!res.ok) {
-                let errorMessage = 'Sipariş oluşturulamadı';
-                try {
-                    const errorText = await res.text();
-                    if (errorText) {
-                        try {
-                            const errorJson = JSON.parse(errorText);
-                            errorMessage = errorJson.message || errorMessage;
-                        } catch {
-                            errorMessage = errorText; // Use raw text if not JSON
-                        }
-                    } else {
-                        errorMessage += ` (${res.status} ${res.statusText})`;
-                    }
-                } catch (e) {
-                    errorMessage += ` (${res.status} ${res.statusText})`;
-                }
-                throw new Error(errorMessage);
-            }
-
-            alert("Siparişiniz başarıyla alındı! 🎉");
-            clearCart();
-            setIsCartOpen(false);
-            router.push('/orders'); // Redirect to Order History
-
-        } catch (e) {
-            alert("Hata: " + e.message);
-        } finally {
-            setIsCheckingOut(false);
-        }
+        setIsCartOpen(false);
+        router.push('/checkout');
     };
 
     return (

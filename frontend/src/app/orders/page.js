@@ -91,6 +91,19 @@ export default function OrdersPage() {
                                 ))}
                             </div>
 
+                            <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                    <div>
+                                        <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Teslimat Adresi:</div>
+                                        <div>{order.shippingAddress || 'Adres belirtilmedi'}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Ödeme Yöntemi:</div>
+                                        <div>{order.paymentMethod === 'CASH_ON_DELIVERY' ? 'Kapıda Ödeme' : order.paymentMethod}</div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'right' }}>
                                 <span style={{ fontSize: '0.8rem', color: '#4ade80', background: 'rgba(74, 222, 128, 0.1)', padding: '4px 8px', borderRadius: '4px' }}>
                                     Sipariş Alındı

@@ -8,7 +8,25 @@ import java.util.UUID;
 public class OrderDto {
 
     public static class CreateRequest {
+        private String shippingAddress;
+        private String paymentMethod;
         private List<OrderItemRequest> items;
+
+        public String getShippingAddress() {
+            return shippingAddress;
+        }
+
+        public void setShippingAddress(String shippingAddress) {
+            this.shippingAddress = shippingAddress;
+        }
+
+        public String getPaymentMethod() {
+            return paymentMethod;
+        }
+
+        public void setPaymentMethod(String paymentMethod) {
+            this.paymentMethod = paymentMethod;
+        }
 
         public List<OrderItemRequest> getItems() {
             return items;
@@ -44,13 +62,18 @@ public class OrderDto {
         private UUID id;
         private BigDecimal totalAmount;
         private LocalDateTime createdAt;
-        private String status; // For now simplified, could be enum
+        private String status;
+        private String shippingAddress;
+        private String paymentMethod;
         private List<OrderItemResponse> items;
 
-        public Response(UUID id, BigDecimal totalAmount, LocalDateTime createdAt, List<OrderItemResponse> items) {
+        public Response(UUID id, BigDecimal totalAmount, LocalDateTime createdAt, String shippingAddress,
+                String paymentMethod, List<OrderItemResponse> items) {
             this.id = id;
             this.totalAmount = totalAmount;
             this.createdAt = createdAt;
+            this.shippingAddress = shippingAddress;
+            this.paymentMethod = paymentMethod;
             this.items = items;
         }
 
@@ -68,6 +91,14 @@ public class OrderDto {
 
         public List<OrderItemResponse> getItems() {
             return items;
+        }
+
+        public String getShippingAddress() {
+            return shippingAddress;
+        }
+
+        public String getPaymentMethod() {
+            return paymentMethod;
         }
     }
 
