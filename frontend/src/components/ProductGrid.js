@@ -10,7 +10,7 @@ export default function ProductGrid({ initialProducts, categories }) {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredProducts = initialProducts.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+        p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
