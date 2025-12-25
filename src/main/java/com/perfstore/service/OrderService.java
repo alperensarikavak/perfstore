@@ -35,6 +35,16 @@ public class OrderService {
                 User user = userRepository.findByUsername(username)
                                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+                // Rate Limiting: Check last order time
+                orderRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId())
+                                .ifPresent(lastOrder -> {
+                                        if (lastOrder.getCreatedAt()
+                                                        .isAfter(java.time.LocalDateTime.now().minusMinutes(2))) {
+                                                throw new RuntimeException(
+                                                                "Lütfen yeni sipariş vermeden önce 2 dakika bekleyiniz.");
+                                        }
+                                });
+
                 Order order = new Order();
                 order.setUser(user);
                 order.setShippingAddress(request.getShippingAddress());

@@ -60,6 +60,13 @@ export default function CheckoutPage() {
                 body: JSON.stringify(payload)
             });
 
+            if (res.status === 403 || res.status === 401) {
+                alert("Oturum süreniz dolmuş veya geçersiz. Lütfen tekrar giriş yapın. 🔒");
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
+
             if (!res.ok) {
                 let errorMessage = 'Sipariş oluşturulamadı';
                 try {
@@ -80,9 +87,9 @@ export default function CheckoutPage() {
                 throw new Error(errorMessage);
             }
 
-            alert("Siparişiniz başarıyla alındı! 🎉");
+            alert("Siparişiniz başarıyla alındı! 🎉 Ana sayfaya yönlendiriliyorsunuz...");
             clearCart();
-            router.push('/orders');
+            router.push('/');  // Redirect to Home
 
         } catch (error) {
             alert("Hata: " + error.message);
