@@ -15,7 +15,10 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 @SpringBootApplication
+@EnableScheduling
 public class PerfstoreApplication {
 
 	public static void main(String[] args) {

@@ -67,11 +67,12 @@ public class OrderDto {
         private String paymentMethod;
         private List<OrderItemResponse> items;
 
-        public Response(UUID id, BigDecimal totalAmount, LocalDateTime createdAt, String shippingAddress,
+        public Response(UUID id, BigDecimal totalAmount, LocalDateTime createdAt, String status, String shippingAddress,
                 String paymentMethod, List<OrderItemResponse> items) {
             this.id = id;
             this.totalAmount = totalAmount;
             this.createdAt = createdAt;
+            this.status = status;
             this.shippingAddress = shippingAddress;
             this.paymentMethod = paymentMethod;
             this.items = items;
@@ -87,6 +88,10 @@ public class OrderDto {
 
         public LocalDateTime getCreatedAt() {
             return createdAt;
+        }
+
+        public String getStatus() {
+            return status;
         }
 
         public List<OrderItemResponse> getItems() {

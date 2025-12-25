@@ -76,6 +76,7 @@ public class OrderService {
                                 savedOrder.getId(),
                                 savedOrder.getTotalAmount(),
                                 savedOrder.getCreatedAt(),
+                                savedOrder.getStatus(),
                                 savedOrder.getShippingAddress(),
                                 savedOrder.getPaymentMethod(),
                                 itemResponses);
@@ -98,6 +99,7 @@ public class OrderService {
                                                         order.getId(),
                                                         order.getTotalAmount(),
                                                         order.getCreatedAt(),
+                                                        order.getStatus(),
                                                         order.getShippingAddress(),
                                                         order.getPaymentMethod(),
                                                         itemResponses);

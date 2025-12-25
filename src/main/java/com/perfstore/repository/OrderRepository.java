@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     List<Order> findByUserId(Long userId);
+
+    List<Order> findByStatusAndCreatedAtBefore(String status, java.time.LocalDateTime createdAt);
 }

@@ -33,6 +33,19 @@ public class Order {
     @Column(nullable = false)
     private String paymentMethod = "UNKNOWN";
 
+    @Column(nullable = false)
+    private String status = "PENDING"; // PENDING, COMPLETED, CANCELLED
+
+    // getters and setters
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // getters and setters
 
     public String getShippingAddress() {
