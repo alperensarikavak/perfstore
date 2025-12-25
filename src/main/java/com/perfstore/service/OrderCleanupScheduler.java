@@ -1,7 +1,7 @@
 package com.perfstore.service;
 
 import com.perfstore.domain.Order;
-import com.perfstore.domain.Product;
+
 import com.perfstore.repository.OrderRepository;
 import com.perfstore.repository.ProductRepository;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -41,10 +41,9 @@ public class OrderCleanupScheduler {
 
             // 2. Restore Stock
             order.getItems().forEach(item -> {
-                Product product = item.getProduct();
-                product.setStockQuantity(product.getStockQuantity() + item.getQuantity());
-                productRepository.save(product);
-                System.out.println("Restored stock for: " + product.getName() + " (+ " + item.getQuantity() + ")");
+                productRepository.increaseStock(item.getProduct().getId(), item.getQuantity());
+                System.out.println(
+                        "Restored stock for: " + item.getProduct().getName() + " (+ " + item.getQuantity() + ")");
             });
 
             System.out.println("Order " + order.getId() + " cancelled.");

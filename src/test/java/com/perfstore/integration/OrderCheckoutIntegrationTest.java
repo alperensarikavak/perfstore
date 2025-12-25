@@ -146,8 +146,7 @@ public class OrderCheckoutIntegrationTest {
                 .header("Authorization", "Bearer " + userToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError()); // Or whatever generic exception maps to (Bad Request
-                                                              // ideally)
+                .andExpect(status().isConflict()); // Expect 409 Conflict for insufficient stock
 
         // Verify Database - No order created
         assertEquals(0, orderRepository.count());

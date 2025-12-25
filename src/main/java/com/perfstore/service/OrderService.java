@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +40,7 @@ public class OrderService {
                                 .ifPresent(lastOrder -> {
                                         if (lastOrder.getCreatedAt()
                                                         .isAfter(java.time.LocalDateTime.now().minusMinutes(2))) {
-                                                throw new RuntimeException(
+                                                throw new com.perfstore.exception.RateLimitExceededException(
                                                                 "Lütfen yeni sipariş vermeden önce 2 dakika bekleyiniz.");
                                         }
                                 });
@@ -51,19 +51,22 @@ public class OrderService {
                 order.setPaymentMethod(request.getPaymentMethod());
 
                 BigDecimal totalAmount = BigDecimal.ZERO;
-                List<OrderItem> orderItems = new ArrayList<>();
 
                 for (OrderDto.OrderItemRequest itemRequest : request.getItems()) {
                         Product product = productRepository.findById(itemRequest.getProductId())
                                         .orElseThrow(() -> new RuntimeException("Product not found"));
 
-                        if (product.getStockQuantity() < itemRequest.getQuantity()) {
-                                throw new RuntimeException("Insufficient stock for product: " + product.getName());
+                        // Atomic stock update (returns 1 if successful, 0 if stock insufficient)
+                        int updatedRows = productRepository.decreaseStock(product.getId(), itemRequest.getQuantity());
+                        if (updatedRows == 0) {
+                                throw new com.perfstore.exception.InsufficientStockException(
+                                                "Insufficient stock for product: " + product.getName());
                         }
 
-                        // Deduct stock
-                        product.setStockQuantity(product.getStockQuantity() - itemRequest.getQuantity());
-                        productRepository.save(product);
+                        // We don't set stock quantity on the object here because we want the DB to be
+                        // the source of truth,
+                        // and we updated the DB directly. The entity in logic is slightly stale
+                        // regarding stock, but that's fine for creating order item.
 
                         OrderItem orderItem = new OrderItem(product, itemRequest.getQuantity(), product.getPrice());
                         order.addItem(orderItem);
