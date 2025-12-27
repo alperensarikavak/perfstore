@@ -98,3 +98,129 @@ a {
 .btn-primary:active {
   transform: scale(0.98);
 }
+
+/* Login page elements */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.2);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+  background: rgba(0,0,0,0.3);
+}
+
+.link-accent-hover {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.link-accent-hover:hover {
+  text-decoration: underline;
+  filter: brightness(1.2);
+}
+
+/* Main Page elements */
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  fontSize: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+  background: rgba(0,0,0,0.4);
+}
+
+.cart-icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cart-icon-btn:hover {
+  transform: scale(1.2);
+}
+
+.cart-icon-btn:active {
+  transform: scale(0.9);
+}
+
+.btn-add-product {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border: 1px solid var(--accent);
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-add-product:hover {
+  background: var(--accent);
+  color: var(--bg-dark) !important;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.link-orders {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.link-orders:hover {
+  text-decoration: underline;
+}
+
+.btn-logout {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 8px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+/* Order page elemnts */
+.link-back {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.link-back:hover {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function AddProductPage() {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -70,7 +71,14 @@ export default function AddProductPage() {
     };
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' , alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px' }}>
+
+            <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                <Link href="/" className="link-back">
+                    Ana Sayfaya Dön
+                </Link>
+            </div>
+
             <div className="glass-panel" style={{ padding: '40px', width: '100%', maxWidth: '600px' }}>
                 <h1 className="title-gradient" style={{ fontSize: '2rem', marginBottom: '20px', textAlign: 'center' }}>
                     YENİ ÜRÜN EKLE
@@ -84,7 +92,7 @@ export default function AddProductPage() {
                             <input
                                 {...register('name', { required: 'Ürün adı gerekli' })}
                                 placeholder="Örn: Sony XM5"
-                                style={inputStyle}
+                                className="form-input" // Efekt eklendi
                             />
                             {errors.name && <span style={errorStyle}>{errors.name.message}</span>}
                         </div>
@@ -94,7 +102,7 @@ export default function AddProductPage() {
                             <input
                                 {...register('sku', { required: 'SKU gerekli' })}
                                 placeholder="Örn: SONY-WH-1000XM5"
-                                style={inputStyle}
+                                className="form-input" // Efekt eklendi
                             />
                             {errors.sku && <span style={errorStyle}>{errors.sku.message}</span>}
                         </div>
@@ -106,7 +114,8 @@ export default function AddProductPage() {
                             {...register('description')}
                             placeholder="Ürün açıklaması..."
                             rows={3}
-                            style={{ ...inputStyle, resize: 'vertical' }}
+                            className="form-input" // Efekt eklendi
+                            style={{ resize: 'vertical' }}
                         />
                     </div>
 
@@ -118,7 +127,7 @@ export default function AddProductPage() {
                                 step="0.01"
                                 {...register('price', { required: 'Fiyat gerekli', min: 0 })}
                                 placeholder="0.00"
-                                style={inputStyle}
+                                className="form-input" // Efekt eklendi
                             />
                             {errors.price && <span style={errorStyle}>{errors.price.message}</span>}
                         </div>
@@ -129,7 +138,7 @@ export default function AddProductPage() {
                                 type="number"
                                 {...register('stockQuantity', { required: 'Stok gerekli', min: 0 })}
                                 placeholder="0"
-                                style={inputStyle}
+                                className="form-input" // Efekt eklendi
                             />
                             {errors.stockQuantity && <span style={errorStyle}>{errors.stockQuantity.message}</span>}
                         </div>
@@ -139,7 +148,7 @@ export default function AddProductPage() {
                         <label style={{ display: 'block', marginBottom: '5px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Kategori</label>
                         <select
                             {...register('categoryId', { required: 'Kategori seçilmeli' })}
-                            style={inputStyle}
+                            className="form-input" // Efekt eklendi
                         >
                             <option value="">Kategori Seçiniz</option>
                             {categories.map(cat => (
@@ -164,6 +173,7 @@ export default function AddProductPage() {
                     <button type="submit" className="btn-primary" disabled={isSubmitting} style={{ marginTop: '10px' }}>
                         {isSubmitting ? 'Kaydediliyor...' : 'ÜRÜNÜ KAYDET'}
                     </button>
+
                 </form>
             </div>
         </div>

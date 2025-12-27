@@ -33,15 +33,7 @@ export default function RegisterPage() {
                             type="email"
                             {...register('email', { required: 'E-posta gerekli' })}
                             placeholder="E-Posta"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                background: 'rgba(0,0,0,0.2)',
-                                color: 'white',
-                                outline: 'none'
-                            }}
+                            className="form-input" // Gölge ve odaklanma efekti
                         />
                         {errors.email && <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>{errors.email.message}</span>}
                     </div>
@@ -50,15 +42,7 @@ export default function RegisterPage() {
                         <input
                             {...register('username', { required: 'Kullanıcı adı gerekli' })}
                             placeholder="Kullanıcı Adı"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                background: 'rgba(0,0,0,0.2)',
-                                color: 'white',
-                                outline: 'none'
-                            }}
+                            className="form-input" // Gölge ve odaklanma efekti
                         />
                         {errors.username && <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>{errors.username.message}</span>}
                     </div>
@@ -68,15 +52,7 @@ export default function RegisterPage() {
                             type="password"
                             {...register('password', { required: 'Şifre gerekli', minLength: { value: 6, message: 'En az 6 karakter' } })}
                             placeholder="Şifre"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                background: 'rgba(0,0,0,0.2)',
-                                color: 'white',
-                                outline: 'none'
-                            }}
+                            className="form-input" // Gölge ve odaklanma efekti
                         />
                         {errors.password && <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>{errors.password.message}</span>}
                     </div>
@@ -93,7 +69,7 @@ export default function RegisterPage() {
                 </form>
 
                 <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                    Zaten hesabın var mı? <Link href="/login" style={{ color: 'var(--accent)' }}>Giriş Yap</Link>
+                    Zaten hesabın var mı? <Link href="/login" className="link-accent-hover">Giriş Yap</Link>
                 </div>
             </div>
         </div>

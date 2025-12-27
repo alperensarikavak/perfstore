@@ -32,15 +32,7 @@ export default function LoginPage() {
                         <input
                             {...register('username', { required: 'Kullanıcı adı gerekli' })}
                             placeholder="Kullanıcı Adı"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                background: 'rgba(0,0,0,0.2)',
-                                color: 'white',
-                                outline: 'none'
-                            }}
+                            className="form-input" // CSS sınıfı eklendi
                         />
                         {errors.username && <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>{errors.username.message}</span>}
                     </div>
@@ -50,15 +42,7 @@ export default function LoginPage() {
                             type="password"
                             {...register('password', { required: 'Şifre gerekli' })}
                             placeholder="Şifre"
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '8px',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                background: 'rgba(0,0,0,0.2)',
-                                color: 'white',
-                                outline: 'none'
-                            }}
+                            className="form-input" // CSS sınıfı eklendi
                         />
                         {errors.password && <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>{errors.password.message}</span>}
                     </div>
@@ -75,7 +59,7 @@ export default function LoginPage() {
                 </form>
 
                 <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                    Hesabın yok mu? <Link href="/register" style={{ color: 'var(--accent)' }}>Kayıt Ol</Link>
+                    Hesabın yok mu? <Link href="/register" className="link-accent-hover">Kayıt Ol</Link>
                 </div>
             </div>
         </div>

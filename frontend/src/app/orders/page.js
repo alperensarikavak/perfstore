@@ -48,7 +48,9 @@ export default function OrdersPage() {
         <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px' }}>
                 <h1 className="title-gradient">Sipariş Geçmişim</h1>
-                <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>← Alışverişe Dön</Link>
+                <Link href="/" className="link-back">
+                    Alışverişe Dön
+                </Link>
             </div>
 
             {loading ? (

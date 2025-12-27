@@ -25,17 +25,7 @@ export default function ProductGrid({ initialProducts, categories }) {
                         placeholder="Ürün ara..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: '12px 20px',
-                            borderRadius: '99px',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            background: 'rgba(0,0,0,0.3)',
-                            color: 'white',
-                            fontSize: '1rem',
-                            outline: 'none',
-                            transition: 'all 0.2s'
-                        }}
+                        className="search-input"
                     />
                 </div>
 
@@ -43,7 +33,8 @@ export default function ProductGrid({ initialProducts, categories }) {
                     {/* Cart Icon */}
                     <button
                         onClick={() => setIsCartOpen(true)}
-                        style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', position: 'relative', fontSize: '1.5rem' }}>
+                        className="cart-icon-btn"
+                    >
                         🛒
                         {cartCount > 0 && (
                             <span style={{
@@ -51,21 +42,24 @@ export default function ProductGrid({ initialProducts, categories }) {
                                 background: 'var(--accent)', color: 'black',
                                 fontSize: '0.75rem', fontWeight: 'bold',
                                 width: '20px', height: '20px', borderRadius: '50%',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                pointerEvents: 'none' // Sayının hover etkisini bozmaması için
                             }}>
-                                {cartCount}
-                            </span>
+                         {cartCount}
+                     </span>
                         )}
                     </button>
 
                     {user ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                             <span style={{ color: 'var(--text-muted)' }}>{user.username}</span>
-                            <Link href="/admin/add-product" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem', border: '1px solid var(--accent)', padding: '6px 12px', borderRadius: '8px' }}>+ Ürün Ekle</Link>
-                            <Link href="/orders" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>Siparişlerim</Link>
-                            <button
-                                onClick={logout}
-                                style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid rgba(239, 68, 68, 0.4)', padding: '8px 16px', borderRadius: '99px', cursor: 'pointer', fontWeight: 600 }}>
+                            <Link href="/admin/add-product" className="btn-add-product">
+                                + Ürün Ekle
+                            </Link>
+                            <Link href="/orders" className="link-orders">
+                                Siparişlerim
+                            </Link>
+                            <button onClick={logout} className="btn-logout">
                                 ÇIKIŞ
                             </button>
                         </div>
