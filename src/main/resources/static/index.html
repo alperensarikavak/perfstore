@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TokenGate - Perfect System Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0b1020;
+            color: #f5f5f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 520px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #a5b4fc;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+        }
+
+        input {
+            margin-top: 4px;
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.8);
+            color: #f9fafb;
+            font-size: 0.9rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.6);
+        }
+
+        button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: linear-gradient(135deg, #4f46e5, #22c55e);
+            color: #f9fafb;
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .result {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .result-granted {
+            background: rgba(22, 163, 74, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            color: #bbf7d0;
+        }
+
+        .result-warning {
+            background: rgba(234, 179, 8, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.6);
+            color: #fde68a;
+        }
+
+        .result-denied {
+            background: rgba(220, 38, 38, 0.12);
+            border: 1px solid rgba(248, 113, 113, 0.8);
+            color: #fecaca;
+        }
+
+        .error-text {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #fecaca;
+            text-align: center;
+        }
+
+        #productPage {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #a5b4fc;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: #4f46e5;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #1e293b;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+
+        .product-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 1.1rem;
+        }
+
+        .btn-buy {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 8px;
+            text-align: center;
+            background: #4f46e5;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-buy:hover {
+            background: #4338ca;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            margin: 0 20px;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 99px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.8);
+            color: #f5f5f5;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #4f46e5;
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(148, 163, 184, 0.1);
+            border-radius: 99px;
+            padding: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 99px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #9ca3af;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+
+        .auth-form .grid {
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="authCard" class="card">
+    <div class="title">TOKENGATE</div>
+    <div class="subtitle">
+        Sisteme giriş yapmak veya kayıt olmak için bilgilerinizi giriniz.
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('login')">GİRİŞ YAP</div>
+        <div class="tab" onclick="switchTab('register')">KAYIT OL</div>
+    </div>
+
+    <div id="trustBadge" class="result" style="display:none; margin-bottom:16px;"></div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="auth-form">
+        <div class="grid">
+            <div>
+                <label>Kullanıcı Adı</label>
+                <input id="loginUsername" type="text" placeholder="Kullanıcı Adı">
+            </div>
+            <div>
+                <label>Şifre</label>
+                <input id="loginPassword" type="password" placeholder="Şifre">
+            </div>
+        </div>
+        <button id="loginBtn" onclick="handleLogin()">GİRİŞ YAP</button>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" class="auth-form hidden">
+        <div class="grid">
+            <div>
+                <label>E-Posta</label>
+                <input id="regEmail" type="email" placeholder="ornek@email.com">
+            </div>
+
+            <div>
+                <label>PIN (4 hane)</label>
+                <input id="regPin" type="password" placeholder="Örn: 1234" inputmode="numeric">
+            </div>
+
+            <div>
+                <label>Kullanıcı Adı</label>
+                <input id="regUsername" type="text" placeholder="Kullanıcı Adı">
+            </div>
+
+            <div>
+                <label>Şifre</label>
+                <input id="regPassword" type="password" placeholder="Şifre">
+            </div>
+        </div>
+        <button id="registerBtn" onclick="handleRegister()">KAYIT OL</button>
+    </div>
+
+    <div id="authError" class="error-text"></div>
+
+    <!-- PIN Verify Form -->
+    <div id="pinForm" class="auth-form hidden">
+        <div class="subtitle" style="margin-top:10px;">
+            Hesabınız kısıtlı. Devam etmek için PIN giriniz.
+        </div>
+
+        <div class="grid">
+            <div>
+                <label>PIN</label>
+                <input id="verifyPin" type="password" placeholder="PIN" inputmode="numeric">
+            </div>
+        </div>
+
+        <button id="verifyPinBtn" onclick="handleVerifyPin()">PIN DOĞRULA</button>
+        <button onclick="backToLogin()" style="margin-top:8px;background:#334155;">GERİ DÖN</button>
+    </div>
+
+    <div id="authSuccess" class="success-text"
+         style="color: #4ade80; font-size: 0.8rem; text-align: center; margin-top: 8px;"></div>
+</div>
+
+<!-- Product Page -->
+<div id="productPage">
+    <div class="header">
+        <h1>PerfStore Ürünleri</h1>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Ürün ara..." oninput="handleSearch(this.value)">
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="welcomeUser" style="color: #94a3b8; font-size: 0.8rem;"></span>
+            <button onclick="logout()"
+                    style="width: auto; padding: 8px 16px; margin: 0; background: #ef4444;">Çıkış</button>
+        </div>
+    </div>
+
+    <div id="productsContainer" class="product-grid">
+        <div style="color: #94a3b8; grid-column: 1/-1; text-align: center; padding: 40px;">
+            Yükleniyor...
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = '/api';
+    let currentUserToken = null;
+    let currentUserTrustLevel = "UNKNOWN";
+    let pendingUsernameForPin = null;
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+        // PIN form kapansın
+        document.getElementById('pinForm').classList.add('hidden');
+
+        if (tab === 'login') {
+            document.querySelector('.tab:nth-child(1)').classList.add('active');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+        } else {
+            document.querySelector('.tab:nth-child(2)').classList.add('active');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+        }
+        clearMessages();
+    }
+
+    function clearMessages() {
+        document.getElementById('authError').textContent = '';
+        document.getElementById('authSuccess').textContent = '';
+        const badge = document.getElementById("trustBadge");
+        if (badge) badge.style.display = "none";
+    }
+
+    async function handleLogin() {
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const btn = document.getElementById('loginBtn');
+        const errorText = document.getElementById('authError');
+
+        clearMessages();
+
+        if (!username || !password) {
+            errorText.textContent = 'Lütfen tüm alanları doldurun.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "GİRİŞ YAPILIYOR...";
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Giriş başarısız');
+
+            // 🔐 PIN gerekiyorsa PIN ekranına geç
+            if (data.status === "REQUIRES_PIN") {
+                showPinForm(data.username || username, data.trustLevel);
+                return;
+            }
+
+            // ✅ Normal giriş
+            loginSuccess(data);
+
+        } catch (e) {
+            errorText.textContent = e.message;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "GİRİŞ YAP";
+        }
+    }
+
+    async function handleRegister() {
+        const username = document.getElementById('regUsername').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const email = document.getElementById('regEmail').value.trim();
+        const pin = (document.getElementById('regPin')?.value || "").trim();
+
+        const btn = document.getElementById('registerBtn');
+        const errorText = document.getElementById('authError');
+        const successText = document.getElementById('authSuccess');
+
+        clearMessages();
+
+        if (!username || !password || !email || !pin) {
+            errorText.textContent = 'Lütfen tüm alanları doldurun.';
+            return;
+        }
+
+        if (!/^\d{4,6}$/.test(pin)) {
+            errorText.textContent = 'PIN 4-6 haneli sadece rakam olmalı.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "KAYIT OLUNUYOR...";
+
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, email, pin }) // ✅ pin gönderiliyor
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Kayıt başarısız');
+
+            // Register response token dönmeyebilir → login'e yönlendir
+            successText.textContent = "Kayıt başarılı! Şimdi giriş yapabilirsiniz.";
+            switchTab('login');
+
+            // İstersen login alanını dolduralım:
+            document.getElementById('loginUsername').value = username;
+            document.getElementById('loginPassword').value = password;
+
+        } catch (e) {
+            errorText.textContent = e.message;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "KAYIT OL";
+        }
+    }
+
+    function loginSuccess(data) {
+        currentUserToken = data.token;
+        currentUserTrustLevel = data.trustLevel || "UNKNOWN";
+
+        document.getElementById('welcomeUser').textContent = data.username;
+
+        document.getElementById('authCard').classList.add('hidden');
+        document.getElementById('productPage').style.display = 'block';
+
+        showTrustBadge(currentUserTrustLevel);
+        fetchProducts();
+    }
+
+    function showPinForm(username, trustLevel) {
+        pendingUsernameForPin = username;
+
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('pinForm').classList.remove('hidden');
+
+        clearMessages();
+        showTrustBadge(trustLevel || "RESTRICTED");
+    }
+
+    function backToLogin() {
+        pendingUsernameForPin = null;
+        document.getElementById('verifyPin').value = '';
+        document.getElementById('pinForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        clearMessages();
+    }
+
+    async function handleVerifyPin() {
+        const pin = (document.getElementById('verifyPin')?.value || "").trim();
+        const btn = document.getElementById('verifyPinBtn');
+        const errorText = document.getElementById('authError');
+
+        clearMessages();
+
+        if (!pendingUsernameForPin || !pin) {
+            errorText.textContent = 'Lütfen PIN giriniz.';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "DOĞRULANIYOR...";
+
+        try {
+            const res = await fetch('/api/auth/verify-pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: pendingUsernameForPin, pin })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'PIN doğrulama başarısız');
+
+            loginSuccess(data);
+
+        } catch (e) {
+            errorText.textContent = e.message;
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "PIN DOĞRULA";
+        }
+    }
+
+    let searchTimeout;
+    function handleSearch(query) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            fetchProducts(query);
+        }, 300);
+    }
+
+    async function fetchProducts(query = '') {
+        const container = document.getElementById('productsContainer');
+        try {
+            let url = API_BASE + '/products';
+            if (query) url += `?query=${encodeURIComponent(query)}`;
+
+            const headers = {};
+            if (currentUserToken) headers['Authorization'] = 'Bearer ' + currentUserToken;
+
+            const res = await fetch(url, { headers });
+            if (!res.ok) throw new Error('Ürünler alınamadı');
+
+            const products = await res.json();
+
+            if (products.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#94a3b8">Ürün bulunamadı.</div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+            <div class="product-card">
+                <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                <div class="product-info">
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-desc">${product.description}</div>
+                    <div class="product-price">${formatCurrency(product.price)} TL</div>
+                    <button class="btn-buy" onclick="alert('Satın alma başarılı!')">SATIN AL</button>
+                </div>
+            </div>
+        `).join('');
+
+        } catch (error) {
+            console.error(error);
+            container.innerHTML = '<div style="color: #ef4444; grid-column: 1/-1; text-align: center;">Ürünler yüklenirken hata oluştu.</div>';
+        }
+    }
+
+    function logout() {
+        currentUserToken = null;
+        currentUserTrustLevel = "UNKNOWN";
+        pendingUsernameForPin = null;
+
+        document.getElementById('productPage').style.display = 'none';
+        document.getElementById('authCard').classList.remove('hidden');
+
+        document.getElementById('loginUsername').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('regEmail').value = '';
+        document.getElementById('regUsername').value = '';
+        document.getElementById('regPassword').value = '';
+        const rp = document.getElementById('regPin');
+        if (rp) rp.value = '';
+        document.getElementById('verifyPin').value = '';
+
+        switchTab('login');
+        clearMessages();
+    }
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2 }).format(value);
+    }
+
+    function showTrustBadge(level) {
+        const badge = document.getElementById("trustBadge");
+        if (!badge) return;
+
+        badge.style.display = "block";
+        badge.className = "result";
+
+        if (level === "RESTRICTED") {
+            badge.classList.add("result-denied");
+            badge.textContent = "⚠️ Restricted User: Hesabınız sınırlı erişimdedir.";
+        } else if (level === "TRUSTED") {
+            badge.classList.add("result-granted");
+            badge.textContent = "✅ Trusted User: Tam erişim aktif.";
+        } else if (level === "NORMAL") {
+            badge.classList.add("result-warning");
+            badge.textContent = "ℹ️ Normal User: Standart erişim.";
+        } else {
+            badge.classList.add("result-warning");
+            badge.textContent = "ℹ️ Trust bilgisi alınamadı.";
+        }
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3307/tokengate?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update # <-- Aradığın ayar burada, zaten ekli.
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+server:
+  port: 8080
+
+# Cloudinary Ayarları (YAML formatına çevrildi)
+cloudinary:
+  cloud-name: dndh6pkxm
+  api-key: '184912328843662'
+  api-secret: H4R18Jfrt7B_jpcM2FE4zLlqMkQ

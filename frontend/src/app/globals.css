@@ -1,0 +1,223 @@
+:root {
+  /* --- Perfect System Palette --- */
+  --bg-dark: #0b1020;
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-card-hover: rgba(15, 23, 42, 0.8);
+  
+  --primary: #4f46e5;
+  --primary-glow: rgba(79, 70, 229, 0.6);
+  
+  --accent: #22c55e;
+  --accent-glow: rgba(34, 197, 94, 0.6);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --border-light: rgba(148, 163, 184, 0.1);
+  --border-active: rgba(79, 70, 229, 0.4);
+
+  /* --- Glass Effects --- */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --backdrop-blur: blur(12px);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #0b1020 70%);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Utilities */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: var(--backdrop-blur);
+  -webkit-backdrop-filter: var(--backdrop-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+}
+
+.title-gradient {
+  background: linear-gradient(135deg, #a5b4fc 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #4338ca);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 99px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Main Page Elements */
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-glow);
+  background: rgba(0,0,0,0.4);
+}
+
+.cart-icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+.cart-icon-btn:hover { transform: scale(1.2); }
+
+.btn-add-product {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border: 1px solid var(--accent);
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+.btn-add-product:hover {
+  background: var(--accent);
+  color: black !important;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.btn-logout {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 8px 16px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn-logout:hover {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.product-card {
+  overflow: hidden;
+  padding: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+.nav-link:hover {
+  text-decoration: underline;
+  color: var(--accent);
+}
+
+/* Admin Page Elements */
+
+/* Düzenle Butonu (Secondary) */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Sil Butonu (Danger) */
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
